@@ -1,62 +1,62 @@
-#include <string.h>
-#include <stdio.h>
-#include <nanomsg/nn.h>
-#include <nanomsg/pair.h>
-#include <nanomsg/pubsub.h>
-#include <nanomsg/tcp.h>
-#include "./nano_err.h" // copy over /usr/cn/nanomsg/src/utils/err.h locally.
-
+import nanomsg;
+import core.stdc.stdio;
+import core.stdc.string;
+import std.string;
 
 // ==================================
 // ==================================
-// servnano.c : micro tcp server example
+// nanoserv.d 
 // ==================================
 // ==================================
 
-// gcc -g -o servnano servnano.c -lnanomsg
 
-#define SOCKET_ADDRESS "tcp://127.0.0.1:5555"
 
 int main ()
 {
-  int rc;
   int sb;
-  int sc;
   int i;
   char buf [4];
   int opt;
   size_t sz;
+  char msg[256];
+  char* pRecvd;
 
-  // server
+  immutable char* SOCKET_ADDRESS = "tcp://127.0.0.1:5555".ptr;
 
-  sb = nn_socket (AF_SP, NN_PAIR);
-  errno_assert (sb >= 0);
+
+  // client, running on windows
+
+  auto sc = nn_socket (AF_SP, NN_PAIR);
+  assert (sc >= 0);
 
   // bind
-  rc = nn_bind (sb, SOCKET_ADDRESS);
-  errno_assert (rc > 0);
+  auto rc = nn_bind (sc, cast(char*)SOCKET_ADDRESS);
+  assert (rc > 0);
+
 
   // receive
-  bzero(buf, 4);
-  rc = nn_recv(sb, buf, sizeof(buf), 0);
-  errno_assert(rc >= 0);
-  nn_assert(rc == 3);
+  rc = nn_recv (sc, &pRecvd, NN_MSG, 0);
+  assert (rc >= 0);
+  assert (rc == 3); // nn_assert
 
-  printf("server: I received: '%s'\n", buf);
+  sprintf(msg, "server: I received: '%s'\n\0", buf);
+  printf(msg);
 
   // send
-  memcpy(buf, "LUV\0", 4); // trailing null for later printf
-  rc = nn_send (sb, buf, 3, 0);
-  printf("server: I sent: '%s'\n", buf);
+  memcpy(buf, "LUV\0".ptr, 4);
+  rc = nn_send (sc, buf, 3, 0);
+  printf("server: I sent '%s'\n", buf);
+  assert (rc >= 0);
+  assert (rc == 3); // nn_assert
 
-  errno_assert (rc >= 0);
-  nn_assert (rc == 3);
-   
+
+  // free
+  rc = nn_freemsg(pRecvd);
+  assert (rc == 0);
+
   // close
-  rc = nn_close (sb);
-  errno_assert (rc == 0);
+  rc = nn_close (sc);
+  assert (rc == 0);
 
   return 0;
 }
-
-

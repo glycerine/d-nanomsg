@@ -21,7 +21,7 @@ int main ()
   char msg[256];
   char* pRecvd;
 
-  char* SOCKET_ADDRESS = cast(char*)"tcp://127.0.0.1:5555";
+  immutable char* SOCKET_ADDRESS = "tcp://127.0.0.1:5555".ptr;
 
 
   // client, running on windows
@@ -30,7 +30,7 @@ int main ()
   assert (sc >= 0);
 
   // connect
-  auto rc = nn_connect (sc, SOCKET_ADDRESS);
+  auto rc = nn_connect (sc, cast(char*)SOCKET_ADDRESS);
   assert (rc > 0);
 
   // send
