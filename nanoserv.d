@@ -2,6 +2,7 @@ import nanomsg;
 import core.stdc.stdio;
 import core.stdc.string;
 import std.string;
+import std.stdio;
 
 // ==================================
 // ==================================
@@ -18,7 +19,6 @@ int main ()
   char buf [4];
   int opt;
   size_t sz;
-  char msg[256];
   char* pRecvd;
 
   immutable char* SOCKET_ADDRESS = "tcp://127.0.0.1:5555".ptr;
@@ -39,13 +39,13 @@ int main ()
   assert (rc >= 0);
   assert (rc == 3); // nn_assert
 
-  sprintf(msg, "server: I received: '%s'\n\0", buf);
-  printf(msg);
+  writefln("server: I received: '%s'\n\0", buf);
+
 
   // send
   memcpy(buf, "LUV\0".ptr, 4);
   rc = nn_send (sc, buf, 3, 0);
-  printf("server: I sent '%s'\n", buf);
+  writefln("server: I sent '%s'\n", buf);
   assert (rc >= 0);
   assert (rc == 3); // nn_assert
 
