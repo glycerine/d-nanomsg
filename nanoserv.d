@@ -46,9 +46,10 @@ int main ()
 
 
   // send
-  memcpy(buf, "LUV\0".ptr, 4);
+  memcpy(buf, "LUV".ptr, 4);
   rc = nn_send (sc, buf, 3, 0);
-  printf("server: I sent '%s'\n", buf);
+  string s = to!string(cast(char*)buf);
+  writefln("server: I sent '%s'\n", s);
   assert (rc >= 0);
   assert (rc == 3); // nn_assert
 
