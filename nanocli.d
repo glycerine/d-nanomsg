@@ -3,6 +3,7 @@ import core.stdc.stdio;
 import core.stdc.string;
 import std.string;
 import std.stdio;
+import std.conv;
 
 // ==================================
 // ==================================
@@ -35,9 +36,10 @@ int main ()
   assert (rc > 0);
 
   // send
-  memcpy(buf, "WHY\0".ptr, 4);
+  memcpy(buf, "WHY".ptr, 4);
   rc = nn_send (sc, buf, 3, 0);
-  writefln("client: I sent '%s'\n", buf);
+  string s = to!string(cast(char*)buf);
+  writefln("client: I sent '%s'", s);
   assert (rc >= 0);
   assert (rc == 3); // nn_assert
 
@@ -46,7 +48,8 @@ int main ()
   assert (rc >= 0);
   assert (rc == 3); // nn_assert
 
-  writefln("client: I received a %d byte msg: '%s'", rc, pRecvd);
+  string r = to!string(pRecvd);
+  writefln("client: I received a %d byte msg: '%s'", rc, r);
 
   // free
   rc = nn_freemsg(pRecvd);

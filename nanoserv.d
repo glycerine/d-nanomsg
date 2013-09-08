@@ -3,6 +3,7 @@ import core.stdc.stdio;
 import core.stdc.string;
 import std.string;
 import std.stdio;
+import std.conv;
 
 // ==================================
 // ==================================
@@ -28,6 +29,7 @@ int main ()
 
   auto sc = nn_socket (AF_SP, NN_PAIR);
   assert (sc >= 0);
+  writefln("nn_socket returned: %d", sc);
 
   // bind
   auto rc = nn_bind (sc, cast(char*)SOCKET_ADDRESS);
@@ -39,13 +41,14 @@ int main ()
   assert (rc >= 0);
   assert (rc == 3); // nn_assert
 
-  writefln("server: I received a %d byte msg: '%s'", rc, pRecvd);
+  string r = to!string(pRecvd);
+  writefln("server: I received a %d byte msg: '%s'", rc, r);
 
 
   // send
   memcpy(buf, "LUV\0".ptr, 4);
   rc = nn_send (sc, buf, 3, 0);
-  writefln("server: I sent '%s'\n", buf);
+  printf("server: I sent '%s'\n", buf);
   assert (rc >= 0);
   assert (rc == 3); // nn_assert
 
