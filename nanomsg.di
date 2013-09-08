@@ -1,6 +1,10 @@
 // ======================================
 // nanomsg.di : nanomsg bindings for D
 //
+// to use: put 
+//   import nanomsg;
+// at the top of your D source file.
+// And at link time, supply: -L-lnanomsg
 // ======================================
 
 
