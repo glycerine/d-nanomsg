@@ -19,6 +19,6 @@ cnano:
 	gcc -g -o servnano servnano.c -lnanomsg -I${NANO_SRC_DIR}
 
 dnano:
-	gcc -g -o clinano clinano.d -lnanomsg -I${NANO_SRC_DIR}
-	gcc -g -o servnano servnano.d -lnanomsg -I${NANO_SRC_DIR}
+	dmd -g -ofnanocli  nanocli.d -L-lnanomsg -I${NANO_SRC_DIR}
+	dmd -g -ofnanoserv nanoserv.d -L-lnanomsg -I${NANO_SRC_DIR}
 
