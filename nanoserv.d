@@ -39,7 +39,7 @@ int main ()
   assert (rc >= 0);
   assert (rc == 3); // nn_assert
 
-  writefln("server: I received: '%s'\n\0", buf);
+  writefln("server: I received a %d byte msg: '%s'", rc, pRecvd);
 
 
   // send
